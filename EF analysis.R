@@ -71,3 +71,91 @@ df_EF$As[is.na(df_EF$As)] <- 1.095
 sum(is.na(df_EF$As))
 sum(is.na(df_EF$Hg))
 df_EF[c("Sample ID", "As", "Hg")]
+View(df_EF[c("Sample ID", "As", "Hg")])
+View(df_EF[c("Sample ID", "As", "Hg")])
+background <- c(
+  Mn = 488,
+  Cr = 59.5,
+  Co = 11.3,
+  Ni = 29,
+  Cu = 38.9,
+  Zn = 70,
+  As = 6.83,
+  Sb = 0.67,
+  Hg = 0.07,
+  Pb = 27
+)
+
+Fe_background <- 14470
+
+target_elements <- names(background)
+background
+background <- c(
+  Mn = 488,
+  Cr = 59.5,
+  Co = 11.3,
+  Ni = 29,
+  Cu = 38.9,
+  Zn = 70,
+  As = 6.83,
+  Sb = 0.67,
+  Hg = 0.07,
+  Pb = 27
+)
+background
+Fe_background <- 14470
+target_elements <- names(background)
+target_elements
+for (el in target_elements) {
+  df_EF[[paste0("EF_", el)]] <-
+    (df_EF[[el]] / df_EF$Fe) /
+    (background[el] / Fe_background)
+}
+Fe_background <- 14470
+Fe_background
+for (el in target_elements) {
+  df_EF[[paste0("EF_", el)]] <-
+    (df_EF[[el]] / df_EF$Fe) /
+    (background[el] / Fe_background)
+}
+names(df_EF)
+View(df_EF[c("Sample ID", paste0("EF_", target_elements))])
+summary(df_EF[paste0("EF_", target_elements)])
+View(df_EF[c(
+  "Sample ID",
+  "EF_As",
+  "EF_Sb",
+  "EF_Hg",
+  "EF_Pb"
+)])
+EF_class <- function(x) {
+  ifelse(x < 1, "No enrichment",
+         ifelse(x < 3, "Minor",
+                ifelse(x < 5, "Moderate",
+                       ifelse(x < 10, "Moderately severe",
+                              ifelse(x < 25, "Severe",
+                                     "Extremely severe")))))
+}
+for (el in target_elements) {
+  df_EF[[paste0("Class_", el)]] <-
+    EF_class(df_EF[[paste0("EF_", el)]])
+}
+View(df_EF[c(
+  "Sample ID",
+  "EF_As", "Class_As",
+  "EF_Sb", "Class_Sb",
+  "EF_Hg", "Class_Hg",
+  "EF_Pb", "Class_Pb"
+)])
+df_EF[c(
+  "Sample ID",
+  "EF_As", "Class_As",
+  "EF_Sb", "Class_Sb",
+  "EF_Hg", "Class_Hg",
+  "EF_Pb", "Class_Pb"
+  
+)]
+table(df_EF$Class_As)
+table(df_EF$Class_Sb)
+table(df_EF$Class_Hg)
+table(df_EF$Class_Pb)
